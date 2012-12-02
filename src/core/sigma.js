@@ -38,9 +38,11 @@ function Sigma(root, id) {
     drawNodes: 2,
     drawEdges: 1,
     drawLabels: 2,
+    drawClusters: 2,
     lastNodes: 2,
     lastEdges: 0,
     lastLabels: 2,
+    lastClusters: 2,
     drawHoverNodes: true,
     drawActiveNodes: true
   };
@@ -76,12 +78,12 @@ function Sigma(root, id) {
   this.domElements = {};
 
   initDOM('edges', 'canvas');
+  initDOM('clusters', 'canvas');
   initDOM('nodes', 'canvas');
   initDOM('labels', 'canvas');
   initDOM('hover', 'canvas');
   initDOM('monitor', 'div');
   initDOM('mouse', 'canvas');
-
   /**
    * The class dedicated to manage the drawing process of the graph of the
    * different canvas.
@@ -91,6 +93,7 @@ function Sigma(root, id) {
     this.domElements.nodes.getContext('2d'),
     this.domElements.edges.getContext('2d'),
     this.domElements.labels.getContext('2d'),
+    this.domElements.clusters.getContext('2d'),
     this.domElements.hover.getContext('2d'),
     this.graph,
     this.width,
@@ -123,6 +126,7 @@ function Sigma(root, id) {
       self.p.auto ? 2 : self.p.drawNodes,
       self.p.auto ? 0 : self.p.drawEdges,
       self.p.auto ? 2 : self.p.drawLabels,
+      self.p.auto ? 2 : self.p.drawClusters,
       true
     );
   }).bind('stopdrag stopinterpolate', function(e) {
@@ -130,6 +134,7 @@ function Sigma(root, id) {
       self.p.auto ? 2 : self.p.drawNodes,
       self.p.auto ? 1 : self.p.drawEdges,
       self.p.auto ? 2 : self.p.drawLabels,
+      self.p.auto ? 2 : self.p.drawClusters,
       true
     );
   }).bind('mousedown mouseup', function(e) {
@@ -172,7 +177,8 @@ function Sigma(root, id) {
       self.draw(
         self.p.auto ? 2 : self.p.drawNodes,
         self.p.auto ? 0 : self.p.drawEdges,
-        self.p.auto ? 2 : self.p.drawLabels
+        self.p.auto ? 2 : self.p.drawLabels,
+        self.p.auto ? 2 : self.p.drawClusters
       );
     }
   }).bind('stopgenerators', function() {
@@ -210,6 +216,7 @@ function Sigma(root, id) {
         self.p.lastNodes,
         self.p.lastEdges,
         self.p.lastLabels,
+        self.lastClusters,
         true
       );
     }
@@ -262,12 +269,13 @@ function Sigma(root, id) {
    * @param  {?number} nodes  Determines if and how the nodes must be drawn.
    * @param  {?number} edges  Determines if and how the edges must be drawn.
    * @param  {?number} labels Determines if and how the labels must be drawn.
+   * @param  {?number} clusters Determines if and how the cluster must be drawn.
    * @param  {?boolean} safe  If true, nothing will happen if any generator
    *                          affiliated to this instance is currently running
    *                          (an iterative layout, for example).
    * @return {Sigma} Returns itself.
    */
-  function draw(nodes, edges, labels, safe) {
+  function draw(nodes, edges, labels, clusters, safe) {
     if (safe && sigma.chronos.getGeneratorsIDs().some(function(id) {
       return !!id.match(new RegExp('_ext_' + self.id + '$', ''));
     })) {
@@ -277,16 +285,19 @@ function Sigma(root, id) {
     var n = (nodes == undefined) ? self.p.drawNodes : nodes;
     var e = (edges == undefined) ? self.p.drawEdges : edges;
     var l = (labels == undefined) ? self.p.drawLabels : labels;
+    var c = (clusters == undefined) ? self.p.drawClusters : clusters;
 
     var params = {
       nodes: n,
       edges: e,
-      labels: l
+      labels: l,
+      clusters: c
     };
 
     self.p.lastNodes = n;
     self.p.lastEdges = e;
     self.p.lastLabels = l;
+    self.p.lastClusters = c;
 
     // Remove tasks:
     clearSchedule();

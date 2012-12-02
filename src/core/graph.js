@@ -64,6 +64,7 @@ function Graph() {
       'outDegree': 0,
       // Flags :
       'fixed': false,
+      'cluster': false,
       'active': false,
       'hidden': false,
       'forceLabel': false,
@@ -84,6 +85,9 @@ function Graph() {
           n[k] = +params[k];
           break;
         case 'fixed':
+        case 'cluster':
+          n[k] = params[k];
+          break;
         case 'active':
         case 'hidden':
         case 'forceLabel':

@@ -97,8 +97,8 @@ function SigmaPublic(sigmaInstance) {
     return self;
   };
 
-  this.draw = function(nodes, edges, labels, safe) {
-    s.draw(nodes, edges, labels, safe);
+  this.draw = function(nodes, edges, labels, clusters, safe) {
+    s.draw(nodes, edges, labels, clusters, safe);
     return self;
   };
 

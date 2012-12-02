@@ -18,7 +18,7 @@
  * @extends sigma.classes.Cascade
  * @this {Plotter}
  */
-function Plotter(nodesCtx, edgesCtx, labelsCtx, hoverCtx, graph, w, h) {
+function Plotter(nodesCtx, edgesCtx, labelsCtx, clustersCtx, hoverCtx, graph, w, h) {
   sigma.classes.Cascade.call(this);
 
   /**
@@ -150,6 +150,11 @@ function Plotter(nodesCtx, edgesCtx, labelsCtx, hoverCtx, graph, w, h) {
    * @type {CanvasRenderingContext2D}
    */
   var labelsCtx = labelsCtx;
+ /**
+  * The canvas context dedicated to draw the clusters.
+  * @type {CanvasRenderingContext2D}
+  */
+ var clustersCtx = clustersCtx;
 
   /**
    * The canvas context dedicated to draw the hover nodes.
@@ -279,6 +284,10 @@ function Plotter(nodesCtx, edgesCtx, labelsCtx, hoverCtx, graph, w, h) {
   function drawNode(node) {
     var size = Math.round(node['displaySize'] * 10) / 10;
     var ctx = nodesCtx;
+    if (node.cluster) {
+        ctx = clustersCtx;
+    }
+
 
     ctx.fillStyle = node['color'];
     ctx.beginPath();
