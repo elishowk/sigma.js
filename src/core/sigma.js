@@ -216,7 +216,7 @@ function Sigma(root, id) {
         self.p.lastNodes,
         self.p.lastEdges,
         self.p.lastLabels,
-        self.lastClusters,
+        self.p.lastClusters,
         true
       );
     }
