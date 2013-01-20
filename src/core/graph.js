@@ -67,6 +67,7 @@ function Graph() {
       'cluster': false,
       'active': false,
       'hidden': false,
+      'hoverActive': true,
       'forceLabel': false,
       // Strings :
       'label': id.toString(),
@@ -93,6 +94,7 @@ function Graph() {
         case 'forceLabel':
           n[k] = !!params[k];
           break;
+        case 'hoverActive':
         case 'color':
         case 'label':
           n[k] = params[k];
@@ -128,8 +130,10 @@ function Graph() {
       'label': node['label'],
       'id': node['id'],
       'color': node['color'],
+      'cluster': node['cluster'],
       'fixed': node['fixed'],
       'active': node['active'],
+      'hoverActive': node['hoverActive'],
       'hidden': node['hidden'],
       'forceLabel': node['forceLabel'],
       'attr': node['attr']
@@ -590,7 +594,7 @@ function Graph() {
   function checkHover(mX, mY) {
     var dX, dY, s, over = [], out = [];
     self.nodes.forEach(function(node) {
-      if (node['hidden']) {
+      if (node['hidden'] || node['hoverActive'] === false) {
         node['hover'] = false;
         return;
       }
